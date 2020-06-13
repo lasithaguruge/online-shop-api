@@ -1,6 +1,6 @@
 package com.x.onlineshop;
 
-import com.x.onlineshop.models.Order;
+import com.x.onlineshop.dtos.Order;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
