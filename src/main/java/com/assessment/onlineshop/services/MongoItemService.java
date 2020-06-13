@@ -39,4 +39,24 @@ public class MongoItemService implements ItemService {
 
         return result.orElseThrow(() -> new ItemNotFoundException(id));
     }
+
+    public double calculateItemPrice(Item item) {
+        if (item == null) throw new NullPointerException();
+
+        if (item.getNoOfUnits() == 0) throw new ArithmeticException();
+
+        double cartonPrice = item.getPrice();
+        double newCartonPrice = cartonPrice + (cartonPrice * 0.3);
+
+        return newCartonPrice / item.getNoOfUnits();
+    }
+
+    public double calculateDiscount(Item item, int quantity) {
+        if (item == null) throw new NullPointerException();
+
+        double cartonPrice = item.getPrice();
+        double discountCartonPrice = cartonPrice - (cartonPrice * 0.1);
+
+        return discountCartonPrice * quantity;
+    }
 }
