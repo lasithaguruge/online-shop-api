@@ -1,11 +1,15 @@
 package com.x.onlineshop.dtos;
 
+import org.springframework.data.annotation.Id;
+
 public class Item {
+    @Id
     private String id;
     private String name;
     private String description;
     private double price;
     private String uom;
+    private int noOfUnits;
 
     public String getId() {
         return id;
@@ -45,5 +49,13 @@ public class Item {
 
     public void setUom(String uom) {
         this.uom = uom;
+    }
+
+    public int getNoOfUnits() {
+        return noOfUnits;
+    }
+
+    public void setNoOfUnits(int noOfUnits) {
+        this.noOfUnits = noOfUnits;
     }
 }
