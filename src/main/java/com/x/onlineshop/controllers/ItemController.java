@@ -23,7 +23,7 @@ public class ItemController {
     @PostMapping("/api/items")
     @ResponseStatus(HttpStatus.CREATED)
     Item add(@RequestBody @Validated Item item) {
-        LOGGER.info("Add new item with {} ", item);
+        LOGGER.info("Received a item data to add a new item ", item);
 
         Item created = service.create(item);
 

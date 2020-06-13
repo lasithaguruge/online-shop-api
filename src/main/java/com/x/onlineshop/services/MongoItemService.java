@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class MongoItemService implements ItemService {
     private static final Logger LOGGER = LoggerFactory.getLogger(MongoItemService.class);
@@ -22,7 +24,9 @@ public class MongoItemService implements ItemService {
     public Item create(Item item) {
         LOGGER.info("Creatin a new item ", item);
 
+        item.setId(UUID.randomUUID().toString());
         repository.save(item);
+
         LOGGER.info("Created a new Item");
 
         return item;
