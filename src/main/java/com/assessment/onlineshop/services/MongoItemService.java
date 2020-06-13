@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -33,7 +34,9 @@ public class MongoItemService implements ItemService {
     }
 
     @Override
-    public Item findById(Item item) {
-        return null;
+    public Item findById(String id) {
+        Optional<Item> result = repository.findOneById(id);
+
+        return result.orElseThrow(() -> new ItemNotFoundException(id));
     }
 }

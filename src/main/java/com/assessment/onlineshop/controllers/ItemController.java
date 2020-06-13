@@ -30,11 +30,11 @@ public class ItemController {
 
     @GetMapping("/api/items/{id}")
     @ResponseStatus(HttpStatus.OK)
-    String add(@PathVariable(value = "id") String id) {
+    Item add(@PathVariable(value = "id") String id) {
         LOGGER.info("Received a item data to add a new item ", id);
 
-//        Item created = service.create(item);
+        Item item = service.findById(id);
 
-        return id;
+        return item;
     }
 }

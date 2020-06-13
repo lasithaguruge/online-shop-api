@@ -16,9 +16,9 @@ public interface ItemService {
 
     /**
      * Find an item for a given item id
-     * @param item
+     * @param id
      * @return The infomation of the found item
      * @throws com.assessment.onlineshop.services.ItemNotFoundException if no item found
      */
-    Item findById(Item item);
+    Item findById(String id);
 }
