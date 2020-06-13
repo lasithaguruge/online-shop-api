@@ -1,4 +1,4 @@
-package com.assessment.onlineshop.repositories;
+package com.assessment.onlineshop.services;
 
 public class ItemNotFoundException extends RuntimeException {
     public ItemNotFoundException(String itemId) {

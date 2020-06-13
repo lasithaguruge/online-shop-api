@@ -13,4 +13,12 @@ public interface ItemService {
      * @return      The information of the created item.
      */
     Item create(Item item);
+
+    /**
+     * Find an item for a given item id
+     * @param item
+     * @return The infomation of the found item
+     * @throws com.assessment.onlineshop.services.ItemNotFoundException if no item found
+     */
+    Item findById(Item item);
 }

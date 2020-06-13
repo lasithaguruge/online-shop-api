@@ -31,4 +31,9 @@ public class MongoItemService implements ItemService {
 
         return item;
     }
+
+    @Override
+    public Item findById(Item item) {
+        return null;
+    }
 }
