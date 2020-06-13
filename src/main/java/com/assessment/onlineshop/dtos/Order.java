@@ -1,4 +1,4 @@
-package com.x.onlineshop.dtos;
+package com.assessment.onlineshop.dtos;
 
 import java.util.ArrayList;
 

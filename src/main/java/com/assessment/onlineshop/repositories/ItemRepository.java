@@ -1,6 +1,6 @@
-package com.x.onlineshop.repositories;
+package com.assessment.onlineshop.repositories;
 
-import com.x.onlineshop.dtos.Item;
+import com.assessment.onlineshop.dtos.Item;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**

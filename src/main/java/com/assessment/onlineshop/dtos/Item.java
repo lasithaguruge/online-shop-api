@@ -1,4 +1,4 @@
-package com.x.onlineshop.dtos;
+package com.assessment.onlineshop.dtos;
 
 import org.springframework.data.annotation.Id;
 

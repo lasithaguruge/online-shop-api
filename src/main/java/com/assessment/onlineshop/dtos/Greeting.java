@@ -1,4 +1,4 @@
-package com.x.onlineshop.dtos;
+package com.assessment.onlineshop.dtos;
 
 public class Greeting {
     private final long id;

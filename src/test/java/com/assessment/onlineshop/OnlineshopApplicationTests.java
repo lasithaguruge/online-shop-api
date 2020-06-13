@@ -1,4 +1,4 @@
-package com.x.onlineshop;
+package com.assessment.onlineshop;
 
 import com.x.onlineshop.dtos.Order;
 import org.junit.jupiter.api.Assertions;

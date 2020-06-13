@@ -1,6 +1,6 @@
-package com.x.onlineshop.controllers;
+package com.assessment.onlineshop.controllers;
 
-import com.x.onlineshop.dtos.Order;
+import com.assessment.onlineshop.dtos.Order;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

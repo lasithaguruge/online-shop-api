@@ -1,8 +1,7 @@
-package com.x.onlineshop;
+package com.assessment.onlineshop;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 public class OnlineshopApplication {

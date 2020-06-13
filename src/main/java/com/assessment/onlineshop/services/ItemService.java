@@ -1,12 +1,10 @@
-package com.x.onlineshop.services;
+package com.assessment.onlineshop.services;
 
-import com.x.onlineshop.dtos.Item;
-
-import java.util.List;
+import com.assessment.onlineshop.dtos.Item;
 
 /**
  * This interface declares the methods that provides CRUD operations for
- * {@link com.x.onlineshop.dtos.Item} Objects
+ * {@link Item} Objects
  */
 public interface ItemService {
     /**

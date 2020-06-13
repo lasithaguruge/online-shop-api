@@ -1,7 +1,7 @@
-package com.x.onlineshop.controllers;
+package com.assessment.onlineshop.controllers;
 
 
-import com.x.onlineshop.dtos.Greeting;
+import com.assessment.onlineshop.dtos.Greeting;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
