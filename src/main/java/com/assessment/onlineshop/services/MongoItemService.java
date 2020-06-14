@@ -76,21 +76,55 @@ public class MongoItemService implements ItemService {
      * @param orderItems
      * @return The object which contains item id and quantities for each unit of measure
      */
-    public ArrayList<ItemCountStoreByUOM> getItemCountListByUOM(ArrayList<Order.OrderItem> orderItems) {
-        ArrayList<ItemCountStoreByUOM> countList = new ArrayList<>();
+    public List<ItemCountStoreByUOM> getItemCountListByUOM(ArrayList<Order.OrderItem> orderItems) {
         Map<String, Integer> cartonItemCountMap = new HashMap<>();
         Map<String, Integer> singleItemCountMap = new HashMap<>();
+        List<String> itemIds = new ArrayList<>();
 
         for (int i = 0; i < orderItems.size(); i++) {
             Order.OrderItem orderItem = orderItems.get(i);
+            Item item = orderItem.getItem();
+            String itemId = item.getId();
+
+            if (!itemIds.contains(itemId)) itemIds.add(itemId);
 
             if (orderItem.getUom().equals("carton")) {
                 updateCountMap(cartonItemCountMap, orderItem);
             } else {
                 updateCountMap(singleItemCountMap, orderItem);
+
+                int existingSingleItemCount = singleItemCountMap.get(itemId);
+                if (existingSingleItemCount > item.getNoOfUnits()) {
+                    int cartonCountFromSingleItems = existingSingleItemCount / item.getNoOfUnits();
+                    int newSingleItemCount = existingSingleItemCount - (cartonCountFromSingleItems * item.getNoOfUnits());
+
+                    updateCountMap(itemId, cartonItemCountMap, existingSingleItemCount, newSingleItemCount);
+
+                    if (cartonItemCountMap.containsKey(itemId)) {
+                        int existingCartonCount = cartonItemCountMap.get(itemId);
+                        int newCartonCount = existingCartonCount + cartonCountFromSingleItems;
+
+                        updateCountMap(itemId, cartonItemCountMap, existingCartonCount, newCartonCount);
+                    }
+                }
             }
         }
-        return countList;
+
+        return getItemCountListByUOM(itemIds, cartonItemCountMap, singleItemCountMap);
+    }
+
+    public List<ItemCountStoreByUOM> getItemCountListByUOM(List<String> itemIds, Map<String, Integer> cartonCountMap, Map<String, Integer> singleItemCountMap) {
+        List<ItemCountStoreByUOM> countStoreByUOMS = new ArrayList<>();
+        itemIds.forEach(id -> {
+            Map<String, Integer> countMapByUOM = new HashMap<>();
+
+            countMapByUOM.put("carton", cartonCountMap.get(id));
+            countMapByUOM.put("unit", singleItemCountMap.get(id));
+
+            countStoreByUOMS.add(new ItemCountStoreByUOM(id, cartonCountMap));
+        });
+
+        return countStoreByUOMS;
     }
 
     /**
@@ -105,7 +139,13 @@ public class MongoItemService implements ItemService {
             map.put(item.getId(), orderItem.getQuantity());
         } else {
             int exisitingCount = map.get(item.getId());
-            map.replace(item.getId(), exisitingCount, exisitingCount + orderItem.getQuantity());
+            int newCount = exisitingCount + orderItem.getQuantity();
+
+            updateCountMap(item.getId(), map, exisitingCount, newCount);
         }
+    }
+
+    public void updateCountMap(String id, Map<String, Integer> map, int oldCount, int newCount) {
+        map.replace(id, oldCount, newCount);
     }
 }

@@ -7,6 +7,14 @@ public class ItemCountStoreByUOM {
     private String id;
     private Map<String, Integer> countByUOM;
 
+    public ItemCountStoreByUOM() {
+    }
+
+    public ItemCountStoreByUOM(String id, Map<String, Integer> countByUOM) {
+        this.id = id;
+        this.countByUOM = countByUOM;
+    }
+
     public String getId() {
         return id;
     }
