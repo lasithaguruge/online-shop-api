@@ -1,18 +1,17 @@
 package com.assessment.onlineshop.utill;
 
-import java.util.ArrayList;
-import java.util.Map;
-
 public class ItemCountStoreByUOM {
     private String id;
-    private Map<String, Integer> countByUOM;
+    private int cartonCount;
+    private int itemUnitCount;
 
     public ItemCountStoreByUOM() {
     }
 
-    public ItemCountStoreByUOM(String id, Map<String, Integer> countByUOM) {
+    public ItemCountStoreByUOM(String id, int cartonCount, int itemUnitCount) {
         this.id = id;
-        this.countByUOM = countByUOM;
+        this.cartonCount = cartonCount;
+        this.itemUnitCount = itemUnitCount;
     }
 
     public String getId() {
@@ -23,11 +22,19 @@ public class ItemCountStoreByUOM {
         this.id = id;
     }
 
-    public Map<String, Integer> getCountByUOM() {
-        return countByUOM;
+    public int getCartonCount() {
+        return cartonCount;
     }
 
-    public void setCountByUOM(Map<String, Integer> countByUOM) {
-        this.countByUOM = countByUOM;
+    public void setCartonCount(int cartonCount) {
+        this.cartonCount = cartonCount;
+    }
+
+    public int getItemUnitCount() {
+        return itemUnitCount;
+    }
+
+    public void setItemUnitCount(int itemUnitCount) {
+        this.itemUnitCount = itemUnitCount;
     }
 }

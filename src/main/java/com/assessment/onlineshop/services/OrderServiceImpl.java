@@ -1,19 +1,46 @@
 package com.assessment.onlineshop.services;
 
 import com.assessment.onlineshop.dtos.Item;
-import com.assessment.onlineshop.dtos.Order;
+import com.assessment.onlineshop.dtos.OrderItem;
 import com.assessment.onlineshop.utill.ItemCountStoreByUOM;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class OrderServiceImpl implements OrderService {
+    @Autowired
+    private final ItemService itemService;
+
+    public OrderServiceImpl(ItemService itemService) {
+        this.itemService = itemService;
+    }
+
     @Override
-    public double calculateOrderTotal(ArrayList<Order.OrderItem> orderItems) {
+    public double calculateOrderTotal(ArrayList<OrderItem> orderItems) {
         List<ItemCountStoreByUOM> itemCountListByUOM = getItemCountListByUOM(orderItems);
-        return 0;
+        double orderTotal = 0;
+
+        for (int i = 0; i < itemCountListByUOM.size(); i++) {
+            ItemCountStoreByUOM itemCountStoreByUOM = itemCountListByUOM.get(i);
+
+            int cartonCount = itemCountStoreByUOM.getCartonCount();
+            int unitCount = itemCountStoreByUOM.getItemUnitCount();
+
+            System.out.println("ITEM ID "+itemCountStoreByUOM.getId());
+            Item item = itemService.findById(itemCountStoreByUOM.getId());
+
+            if (cartonCount >= 3) orderTotal = orderTotal + getDiscountCartonAmount(item) * cartonCount;
+            else orderTotal = orderTotal + item.getPrice() * cartonCount;
+
+            orderTotal = orderTotal + getItemPrice(item) * unitCount;
+        }
+
+        return orderTotal;
     }
 
     /**
@@ -21,7 +48,7 @@ public class OrderServiceImpl implements OrderService {
      * @param item
      * @return The calculated price
      */
-    public double calculateItemPrice(Item item) {
+    public double getItemPrice(Item item) {
         if (item == null) throw new NullPointerException();
 
         if (item.getNoOfUnits() == 0) throw new ArithmeticException();
@@ -51,16 +78,16 @@ public class OrderServiceImpl implements OrderService {
      * @param orderItems
      * @return The object which contains item id and quantities for each unit of measure
      */
-    public List<ItemCountStoreByUOM> getItemCountListByUOM(ArrayList<Order.OrderItem> orderItems) {
+    public List<ItemCountStoreByUOM> getItemCountListByUOM(ArrayList<OrderItem> orderItems) {
         Map<String, Integer> cartonItemCountMap = new HashMap<>();
         Map<String, Integer> singleItemCountMap = new HashMap<>();
         List<String> itemIds = new ArrayList<>();
 
         for (int i = 0; i < orderItems.size(); i++) {
-            Order.OrderItem orderItem = orderItems.get(i);
+            OrderItem orderItem = orderItems.get(i);
             Item item = orderItem.getItem();
             String itemId = item.getId();
-
+            System.out.println("IDSSSSSSSSSSSSSSSSDDDD "+itemId);
             if (!itemIds.contains(itemId)) itemIds.add(itemId);
 
             if (orderItem.getUom().equals("carton")) {
@@ -90,14 +117,8 @@ public class OrderServiceImpl implements OrderService {
 
     public List<ItemCountStoreByUOM> getItemCountListByUOM(List<String> itemIds, Map<String, Integer> cartonCountMap, Map<String, Integer> singleItemCountMap) {
         List<ItemCountStoreByUOM> countStoreByUOMS = new ArrayList<>();
-        itemIds.forEach(id -> {
-            Map<String, Integer> countMapByUOM = new HashMap<>();
-
-            countMapByUOM.put("carton", cartonCountMap.get(id));
-            countMapByUOM.put("unit", singleItemCountMap.get(id));
-
-            countStoreByUOMS.add(new ItemCountStoreByUOM(id, cartonCountMap));
-        });
+        System.out.println("ITEM IDS "+ itemIds.size() + " FIRST " + itemIds.get(0));
+        itemIds.forEach(id -> countStoreByUOMS.add(new ItemCountStoreByUOM(id, cartonCountMap.get(id), singleItemCountMap.get(id))));
 
         return countStoreByUOMS;
     }
@@ -107,7 +128,7 @@ public class OrderServiceImpl implements OrderService {
      * @param map
      * @param orderItem
      */
-    public void updateCountMap(Map<String, Integer> map, Order.OrderItem orderItem) {
+    public void updateCountMap(Map<String, Integer> map, OrderItem orderItem) {
         Item item = orderItem.getItem();
 
         if (map.isEmpty()) {

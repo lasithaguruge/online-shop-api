@@ -1,9 +1,7 @@
 package com.assessment.onlineshop.services;
 
 import com.assessment.onlineshop.dtos.Item;
-import com.assessment.onlineshop.dtos.Order;
 import com.assessment.onlineshop.repositories.ItemRepository;
-import com.assessment.onlineshop.utill.ItemCountStoreByUOM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
