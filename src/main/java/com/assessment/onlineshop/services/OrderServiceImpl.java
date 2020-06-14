@@ -31,7 +31,6 @@ public class OrderServiceImpl implements OrderService {
             int cartonCount = itemCountStoreByUOM.getCartonCount();
             int unitCount = itemCountStoreByUOM.getItemUnitCount();
 
-            System.out.println("ITEM ID "+itemCountStoreByUOM.getId());
             Item item = itemService.findById(itemCountStoreByUOM.getId());
 
             if (cartonCount >= 3) orderTotal = orderTotal + getDiscountCartonAmount(item) * cartonCount;
@@ -87,7 +86,7 @@ public class OrderServiceImpl implements OrderService {
             OrderItem orderItem = orderItems.get(i);
             Item item = orderItem.getItem();
             String itemId = item.getId();
-            System.out.println("IDSSSSSSSSSSSSSSSSDDDD "+itemId);
+
             if (!itemIds.contains(itemId)) itemIds.add(itemId);
 
             if (orderItem.getUom().equals("carton")) {
@@ -100,13 +99,15 @@ public class OrderServiceImpl implements OrderService {
                     int cartonCountFromSingleItems = existingSingleItemCount / item.getNoOfUnits();
                     int newSingleItemCount = existingSingleItemCount - (cartonCountFromSingleItems * item.getNoOfUnits());
 
-                    updateCountMap(itemId, cartonItemCountMap, existingSingleItemCount, newSingleItemCount);
+                    updateCountMap(itemId, singleItemCountMap, existingSingleItemCount, newSingleItemCount);
 
                     if (cartonItemCountMap.containsKey(itemId)) {
                         int existingCartonCount = cartonItemCountMap.get(itemId);
                         int newCartonCount = existingCartonCount + cartonCountFromSingleItems;
 
                         updateCountMap(itemId, cartonItemCountMap, existingCartonCount, newCartonCount);
+                    } else {
+                        cartonItemCountMap.put(item.getId(), cartonCountFromSingleItems);
                     }
                 }
             }
@@ -117,8 +118,16 @@ public class OrderServiceImpl implements OrderService {
 
     public List<ItemCountStoreByUOM> getItemCountListByUOM(List<String> itemIds, Map<String, Integer> cartonCountMap, Map<String, Integer> singleItemCountMap) {
         List<ItemCountStoreByUOM> countStoreByUOMS = new ArrayList<>();
-        System.out.println("ITEM IDS "+ itemIds.size() + " FIRST " + itemIds.get(0));
-        itemIds.forEach(id -> countStoreByUOMS.add(new ItemCountStoreByUOM(id, cartonCountMap.get(id), singleItemCountMap.get(id))));
+
+        itemIds.forEach(id -> {
+            int cartonCount = 0;
+            int itemCount = 0;
+
+            if (cartonCountMap.containsKey(id)) cartonCount = cartonCountMap.get(id);
+            if (singleItemCountMap.containsKey(id)) itemCount = singleItemCountMap.get(id);
+
+            countStoreByUOMS.add(new ItemCountStoreByUOM(id, cartonCount, itemCount));
+        });
 
         return countStoreByUOMS;
     }
@@ -134,10 +143,14 @@ public class OrderServiceImpl implements OrderService {
         if (map.isEmpty()) {
             map.put(item.getId(), orderItem.getQuantity());
         } else {
-            int exisitingCount = map.get(item.getId());
-            int newCount = exisitingCount + orderItem.getQuantity();
+            if (map.containsKey(item.getId())) {
+                int exisitingCount = map.get(item.getId());
+                int newCount = exisitingCount + orderItem.getQuantity();
 
-            updateCountMap(item.getId(), map, exisitingCount, newCount);
+                updateCountMap(item.getId(), map, exisitingCount, newCount);
+            } else {
+                map.put(item.getId(), orderItem.getQuantity());
+            }
         }
     }
 
