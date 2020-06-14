@@ -9,8 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class OrderController {
 
-    @PostMapping("/api/orders")
-    public Order addOrder(@Validated @RequestBody Order order) {
+    @PostMapping("/api/orders/priceEngine")
+    public Order calculateOrderTotal(@Validated @RequestBody Order order) {
+
         return order;
     }
 }
