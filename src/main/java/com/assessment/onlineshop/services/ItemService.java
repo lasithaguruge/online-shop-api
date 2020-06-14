@@ -29,4 +29,10 @@ public interface ItemService {
      * @return List of item objects
      */
     List<Item> findAll();
+
+    /**
+     * Find each item actual prices from 1-50 units
+     * @return The item price list
+     */
+    List<Item> getItemPriceListByItemCount();
 }

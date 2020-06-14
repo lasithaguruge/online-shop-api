@@ -45,4 +45,50 @@ public class MongoItemService implements ItemService {
 
         return items;
     }
+
+    @Override
+    public List<Item> getItemPriceListByItemCount() {
+        List<Item> items = repository.findAll();
+        List<Item> itemPricesByNumberOfUnit = new ArrayList<>();
+
+        for (int i = 0; i < items.size(); i++) {
+            Item item = items.get(i);
+            itemPricesByNumberOfUnit.addAll(getItemPricesByNumberOfUnit(item, getItemPrice(item)));
+        }
+        return itemPricesByNumberOfUnit;
+    }
+
+    /**
+     * This funcition is calculate the price of a given item
+     * @param item
+     * @return The calculated price
+     */
+    public double getItemPrice(Item item) {
+        if (item == null) throw new NullPointerException();
+
+        if (item.getNoOfUnits() == 0) throw new ArithmeticException();
+
+        double cartonPrice = item.getPrice();
+        double newCartonPrice = cartonPrice + (cartonPrice * 0.3);
+
+        return newCartonPrice / item.getNoOfUnits();
+    }
+
+    public List<Item> getItemPricesByNumberOfUnit(Item item, double itemPrice) {
+        List<Item> items = new ArrayList<>();
+
+        for (int i = 1; i <= 50; i++) {
+            Item newItem = new Item();
+            newItem.setId(UUID.randomUUID().toString());
+            newItem.setName(item.getName());
+            newItem.setDescription(item.getDescription());
+            newItem.setNoOfUnits(i);
+            newItem.setUom("unit");
+            newItem.setPrice(itemPrice * i);
+
+            items.add(newItem);
+        }
+
+        return items;
+    }
 }
