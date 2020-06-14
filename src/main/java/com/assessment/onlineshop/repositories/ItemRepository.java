@@ -3,6 +3,7 @@ package com.assessment.onlineshop.repositories;
 import com.assessment.onlineshop.dtos.Item;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -24,4 +25,10 @@ public interface ItemRepository extends MongoRepository<Item, String> {
      *         this method returns an empty {@link java.util.Optional} object
      */
     Optional<Item> findOneById(String id);
+
+    /**
+     * Find the all items in the item collection
+     * @return The list of item objects
+     */
+    List<Item> findAll();
 }

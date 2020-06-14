@@ -40,4 +40,11 @@ public class MongoItemService implements ItemService {
 
         return result.orElseThrow(() -> new ItemNotFoundException(id));
     }
+
+    @Override
+    public List<Item> findAll() {
+        List<Item> items = repository.findAll();
+
+        return items;
+    }
 }

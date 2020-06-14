@@ -2,6 +2,8 @@ package com.assessment.onlineshop.services;
 
 import com.assessment.onlineshop.dtos.Item;
 
+import java.util.List;
+
 /**
  * This interface declares the methods that provides CRUD operations for
  * {@link Item} Objects
@@ -21,4 +23,10 @@ public interface ItemService {
      * @throws com.assessment.onlineshop.services.ItemNotFoundException if no item found
      */
     Item findById(String id);
+
+    /**
+     * Find all items in the item collection
+     * @return List of item objects
+     */
+    List<Item> findAll();
 }
