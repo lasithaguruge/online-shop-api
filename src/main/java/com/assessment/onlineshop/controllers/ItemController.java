@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class ItemController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ItemController.class);
@@ -30,11 +32,19 @@ public class ItemController {
 
     @GetMapping("/api/items/{id}")
     @ResponseStatus(HttpStatus.OK)
-    Item add(@PathVariable(value = "id") String id) {
+    Item get(@PathVariable(value = "id") String id) {
         LOGGER.info("Received a item data to add a new item ", id);
 
         Item item = service.findById(id);
 
         return item;
+    }
+
+    @GetMapping("/api/items")
+    @ResponseStatus(HttpStatus.OK)
+    List<Item> getAll() {
+        List<Item> items = service.findAll();
+
+        return items;
     }
 }
